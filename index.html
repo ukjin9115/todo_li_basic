@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<style>
+    #container {
+        width: 500px;
+        margin: 0 auto;
+    }
+
+    header {
+        background-color: #ccc;
+        padding: 10px;
+    }
+
+    #todo-list {
+        list-style-type: none;
+    }
+
+    #todo-list li {
+        border-bottom: 1px solid #ccc;
+    }
+</style>
+<body>
+    <div id="container">
+      <header>
+        <h1>Todo List</h1>
+      </header>
+          <section>
+          <ul id="todo-list">
+                  <li class="todo"></li>
+          </ul>
+          </section>
+      <footer>
+        <input type="text" id="input-task" placeholder="할 일을 입력하세요.">
+        <button id="btn-add" >추가</button>
+      </footer>
+    </div>
+  </body>
+  <script>
+    function 투두입력받아서추가하기(){
+    const todoText = document.querySelector("#input-task").value;
+	const newLiText = "<li>"+ todoText +"</li>";
+	const selectedUl = document.querySelector("#todo-list");
+	selectedUl.innerHTML += newLiText;
+    document.querySelector("#input-task").value = ""
+}
+
+   document.querySelector("#btn-add").addEventListener("click",투두입력받아서추가하기);
+      
+  </script>
+</html>
