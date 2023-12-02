@@ -25,6 +25,8 @@
         border-bottom: 1px solid #ccc;
     }
 </style>
+
+
 <body>
     <div id="container">
       <header>
@@ -32,7 +34,6 @@
       </header>
           <section>
           <ul id="todo-list">
-                  <li class="todo"></li>
           </ul>
           </section>
       <footer>
@@ -40,19 +41,40 @@
         <button id="btn-add" >추가</button>
       </footer>
     </div>
-  </body>
-  <script>
-    function 투두입력받아서추가하기(){
-    const todoText = document.querySelector("#input-task").value;
-	const newLiText = "<li>"+ todoText +"</li>";
-	const selectedUl = document.querySelector("#todo-list");
-	selectedUl.innerHTML += newLiText;
-    document.querySelector("#input-task").value = ""
-}
 
-   document.querySelector("#btn-add").addEventListener("click",투두입력받아서추가하기);
+
+    <script>
+      function 투두입력받아서추가하기(){
+         const todoText = document.querySelector("#input-task").value;
+         const newLiText = "<li>"+ todoText +"</li>";
+         const selectedUl = document.querySelector("#todo-list");
+         if(todoText !==  ""){ //여기 괄호안을 수정해주세요
+           selectedUl.innerHTML += newLiText;
+           document.querySelector("#input-task").value = "";
+         }else {
+           alert("입력창에 할 일을 입력해주세요")
+         }
+   }
+   
+      document.querySelector("#btn-add").addEventListener("click",투두입력받아서추가하기);
+   
+      function init(){
+       const todoListUl = document.querySelector("#todo-list")
+   
+      if (todoListUl.childElementCount<1){
+          todoListUl.innerText = "할일이 없습니다."
+          console.log("조건문 코드가 실행됨")
+         }
+          console.log("함수가 실행됨!")
+      }
+      // document.addEventListener("DOMContentLoaded", init);
+      init();
       
-  </script>
+   
+         
+     </script>
+  </body>
+  
 </html>
 
 <!-- https://paullabworkspace.notion.site/JS-50ce1621d49c45e3b05dae1d7b8fb1c5 -->
