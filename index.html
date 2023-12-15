@@ -39,7 +39,7 @@
     </footer>
   </div>
   <script>
-  const todoList = []//1.투두들을 넣어둘 배열생성
+  let todoList = []//1.투두들을 넣어둘 배열생성
   function 투두입력받아서추가하기(todoText ){
     if(todoText !== ""){
       const todo = {
@@ -75,17 +75,25 @@ function 투두수정하기(index,editText){
 }
 
 
-function 투두삭제하기(index){
-
-  
+function 투두삭제하기(index){  
   todoList.splice(index,1);
-
-
-
-  
-
 }
 
+
+function 투두저장하기(todoList){
+  localStorage.setItem("todos",JSON.stringify(todoList));  //문자열로변환
+}
+
+function 투두초기화하기(params){
+
+  const todos = localStorage.getItem("todos");
+  if (todos === null){
+    todoList = [];
+  }else{
+    todoList = JSON.parse(todos); //배열ㅇ로변환
+  }
+
+}
 
 
 
@@ -128,6 +136,7 @@ function 투두화면에그려주기(todoList){
 				// 데이터를 조작하고 조작된 데이터에 기반하여 새로그려주도록하기.
         toggleBtn.addEventListener("click",function(){
           투두토글하기(변수);
+          투두저장하기(todoList);
           투두화면에그려주기(todoList);
         })
 
@@ -137,6 +146,8 @@ function 투두화면에그려주기(todoList){
         deleteBtn.addEventListener("click",function(){
           if(confirm("삭제하시겠습니까?")){
             투두삭제하기(변수);
+            투두저장하기(todoList);
+
             투두화면에그려주기(todoList);
 
 
@@ -154,6 +165,8 @@ function 투두화면에그려주기(todoList){
         editBtn.addEventListener("click",function(){
           const editText = prompt("수정할내용을")
           투두수정하기(변수,editText);
+          투두저장하기(todoList);
+
           투두화면에그려주기(todoList);
         })
 
@@ -181,12 +194,17 @@ function 투두화면에그려주기(todoList){
 
 function 추가버튼클릭이벤트(){
     const todoText = document.querySelector("#input-task").value;
-		투두입력받아서추가하기(todoText)
+		투두입력받아서추가하기(todoText);
+    투두저장하기(todoList);
+
     document.querySelector("#input-task").value = "";
-		투두화면에그려주기(todoList)
+		투두화면에그려주기(todoList);
 }
 	document.querySelector("#btn-add").addEventListener("click",추가버튼클릭이벤트);
   function init(){
+    투두초기화하기();
+		투두화면에그려주기(todoList);
+
     const todoListUl = document.querySelector("#todo-list");
     if(todoListUl.childElementCount<1){
       todoListUl.innerText = "할일이 없습니다."
