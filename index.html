@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Todo List</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 
 <style>
@@ -25,56 +24,176 @@
         border-bottom: 1px solid #ccc;
     }
 </style>
-
-
 <body>
-    <div id="container">
-      <header>
-        <h1>Todo List</h1>
-      </header>
-          <section>
-          <ul id="todo-list">
-          </ul>
-          </section>
-      <footer>
-        <input type="text" id="input-task" placeholder="할 일을 입력하세요.">
-        <button id="btn-add" >추가</button>
-      </footer>
-    </div>
-
-
-    <script>
-      function 투두입력받아서추가하기(){
-         const todoText = document.querySelector("#input-task").value;
-         const newLiText = "<li>"+ todoText +"</li>";
-         const selectedUl = document.querySelector("#todo-list");
-         if(todoText !==  ""){ //여기 괄호안을 수정해주세요
-           selectedUl.innerHTML += newLiText;
-           document.querySelector("#input-task").value = "";
-         }else {
-           alert("입력창에 할 일을 입력해주세요")
-         }
-   }
-   
-      document.querySelector("#btn-add").addEventListener("click",투두입력받아서추가하기);
-   
-      function init(){
-       const todoListUl = document.querySelector("#todo-list")
-   
-      if (todoListUl.childElementCount<1){
-          todoListUl.innerText = "할일이 없습니다."
-          console.log("조건문 코드가 실행됨")
-         }
-          console.log("함수가 실행됨!")
+  <div id="container">
+    <header>
+      <h1>Todo List</h1>
+    </header>
+    <section>
+        <ul id="todo-list">
+        </ul>
+    </section>
+    <footer>
+      <input type="text" id="input-task" placeholder="할 일을 입력하세요.">
+      <button id="btn-add">추가</button>
+    </footer>
+  </div>
+  <script>
+  const todoList = []//1.투두들을 넣어둘 배열생성
+  function 투두입력받아서추가하기(todoText ){
+    if(todoText !== ""){
+      const todo = {
+        text: todoText,
+        done: false
       }
-      // document.addEventListener("DOMContentLoaded", init);
-      init();
-      
-   
-         
-     </script>
-  </body>
-  
-</html>
+			todoList.push(todo)//2.투두배열에 입력한 데이터 추가
+    }
+    else{
+      alert("입력창에 할일을 입력해라");
+    }
 
-<!-- https://paullabworkspace.notion.site/JS-50ce1621d49c45e3b05dae1d7b8fb1c5 -->
+    
+}
+function 투두토글하기(변수){
+    if(todoList[변수].done === true){
+      todoList[변수].done = false;
+    }
+    else{
+      todoList[변수].done = true;
+    }
+  }
+
+
+
+function 투두수정하기(index,editText){
+  if(editText !== ""){
+    todoList[index].text = editText;
+  }
+  else{
+    alert("수정할 내용을 입력하세요.");
+  }
+}
+
+
+function 투두삭제하기(index){
+
+  
+  todoList.splice(index,1);
+
+
+
+  
+
+}
+
+
+
+
+
+
+
+
+function 투두화면에그려주기(todoList){
+		const todoListUl = document.querySelector("#todo-list");
+		todoListUl.innerHTML = ""
+	  if(todoList.length<1){
+      todoListUl.innerHTML = "할일이 없습니다."
+    }
+		else{
+			// const newLiText = "<li>"+ todoList[0] +"</li>";
+			// todoListUl.innerHtml += todoLiText
+			// 변수는 0부터 시작, todoList의길이보다 작을때동안 반복
+			for(let 변수=0; 변수<todoList.length; 변수++){
+				// const newLiText = "<li>"+ todoList[변수].text +"</li>";
+				// todoListUl.innerHTML += newLiText
+
+        const newLi = document.createElement("li");
+        newLi.innerText = todoList[변수].text;
+
+        const toggleBtn = document.createElement("button");
+				// todo객체의 완료여부에 따라 텍스트가 바뀜
+				// true일때는 이미 완료상태이니 "취소"
+				// false일때는 완료를 아직 하지않았으니 "완료"를 보여줘야함
+        if(todoList[변수].done === true){
+          toggleBtn.innerText = "취소";
+          newLi.style.color = "red";
+        }
+        else{
+          toggleBtn.innerText = "완료";
+          newLi.style.color = "blue";
+
+
+        }
+				// 토글버튼에 이벤트 추가
+				// 데이터를 조작하고 조작된 데이터에 기반하여 새로그려주도록하기.
+        toggleBtn.addEventListener("click",function(){
+          투두토글하기(변수);
+          투두화면에그려주기(todoList);
+        })
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "삭제"
+
+        deleteBtn.addEventListener("click",function(){
+          if(confirm("삭제하시겠습니까?")){
+            투두삭제하기(변수);
+            투두화면에그려주기(todoList);
+
+
+          }
+
+
+
+          
+        })
+
+        const editBtn = document.createElement("button");
+        editBtn.innerText = "수정"
+
+
+        editBtn.addEventListener("click",function(){
+          const editText = prompt("수정할내용을")
+          투두수정하기(변수,editText);
+          투두화면에그려주기(todoList);
+        })
+
+        const btnDiv = document.createElement("div");
+        btnDiv.appendChild(toggleBtn);
+        btnDiv.appendChild(editBtn);
+        btnDiv.appendChild(deleteBtn);
+        newLi.appendChild(btnDiv);
+
+
+        
+
+
+
+
+
+
+
+
+
+        todoListUl.appendChild(newLi);
+			}
+		}
+}
+
+function 추가버튼클릭이벤트(){
+    const todoText = document.querySelector("#input-task").value;
+		투두입력받아서추가하기(todoText)
+    document.querySelector("#input-task").value = "";
+		투두화면에그려주기(todoList)
+}
+	document.querySelector("#btn-add").addEventListener("click",추가버튼클릭이벤트);
+  function init(){
+    const todoListUl = document.querySelector("#todo-list");
+    if(todoListUl.childElementCount<1){
+      todoListUl.innerText = "할일이 없습니다."
+    }
+  }
+init()
+
+</script>
+</body>
+</html>
